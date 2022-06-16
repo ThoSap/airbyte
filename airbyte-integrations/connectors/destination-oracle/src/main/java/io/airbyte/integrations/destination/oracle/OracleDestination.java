@@ -90,7 +90,7 @@ public class OracleDestination extends AbstractJdbcDestination implements Destin
   public JsonNode toJdbcConfig(final JsonNode config) {
     final Protocol protocol = obtainConnectionProtocol(config);
     final String connectionString = String.format(
-        "jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(PROTOCOL=%s)(HOST=%s)(PORT=%s))(CONNECT_DATA=(SID=%s)))",
+        "jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(PROTOCOL=%s)(HOST=%s)(PORT=%s))(CONNECT_DATA=(SERVICE_NAME=%s)))",
         protocol,
         config.get("host").asText(),
         config.get("port").asText(),

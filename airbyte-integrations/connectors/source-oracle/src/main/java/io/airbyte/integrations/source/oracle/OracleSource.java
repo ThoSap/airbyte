@@ -71,7 +71,7 @@ public class OracleSource extends AbstractJdbcSource<JDBCType> implements Source
         ? obtainConnectionProtocol(config.get("encryption"), additionalParameters)
         : Protocol.TCP;
     final String connectionString = String.format(
-        "jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(PROTOCOL=%s)(HOST=%s)(PORT=%s))(CONNECT_DATA=(SID=%s)))",
+        "jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(PROTOCOL=%s)(HOST=%s)(PORT=%s))(CONNECT_DATA=(SERVICE_NAME=%s)))",
         protocol,
         config.get("host").asText(),
         config.get("port").asText(),
