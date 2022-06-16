@@ -81,6 +81,11 @@
   {%- endif %}
 {%- endmacro %}
 
+{# -- Oracle does not have a data type boolean, it must go through int first #}
+{% macro oracle__cast_to_boolean(field) -%}
+    cast(decode({{ field }}, 'true', 1, 0) as number(1,0))
+{%- endmacro %}
+
 {# -- MS SQL Server does not support converting string directly to boolean, it must be casted as bit #}
 {% macro sqlserver__cast_to_boolean(field) -%}
     cast({{ field }} as bit)

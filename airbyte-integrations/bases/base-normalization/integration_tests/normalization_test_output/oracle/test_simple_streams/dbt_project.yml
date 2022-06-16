@@ -33,7 +33,9 @@ models:
         +materialized: ephemeral
       airbyte_incremental:
         +tags: incremental_tables
-        +materialized: table
+        +materialized: incremental
+        # schema change test isn't supported in Oracle yet
+        +on_schema_change: "ignore"
       airbyte_tables:
         +tags: normalized_tables
         +materialized: table

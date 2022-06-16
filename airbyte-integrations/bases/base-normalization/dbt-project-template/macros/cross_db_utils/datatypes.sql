@@ -152,7 +152,7 @@
 {%- endmacro -%}
 
 {% macro oracle__type_timestamp_with_timezone() %}
-    varchar2(4000)
+    timestamp with time zone
 {% endmacro %}
 
 {%- macro sqlserver__type_timestamp_with_timezone() -%}
@@ -177,7 +177,7 @@
 {% endmacro %}
 
 {% macro oracle__type_date() %}
-    varchar2(4000)
+    date
 {% endmacro %}
 
 {%- macro sqlserver__type_date() -%}

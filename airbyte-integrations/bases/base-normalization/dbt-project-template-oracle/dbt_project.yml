@@ -13,18 +13,18 @@ config-version: 2
 profile: "normalize"
 
 # These configurations specify where dbt should look for different types of files.
-# The `source-paths` config, for example, states that source models can be found
+# The `model-paths` config, for example, states that source models can be found
 # in the "models/" directory. You probably won't need to change these!
-source-paths: ["models"]
+model-paths: ["models"]
 docs-paths: ["docs"]
 analysis-paths: ["analysis"]
 test-paths: ["tests"]
-data-paths: ["data"]
+seed-paths: ["data"]
 macro-paths: ["macros"]
 
 target-path: "../build" # directory which will store compiled SQL files
 log-path: "../logs" # directory which will store DBT logs
-modules-path: "/dbt" # directory which will store external DBT dependencies
+packages-install-path: "/dbt" # directory which will store external DBT dependencies
 
 clean-targets: # directories to be removed by `dbt clean`
   - "build"
@@ -32,10 +32,12 @@ clean-targets: # directories to be removed by `dbt clean`
 
 quoting:
   database: false
+  # Temporarily disabling the behavior of the ExtendedNameTransformer on table/schema names, see (issue #1785)
+  # all schemas should be unquoted
   schema: false
   identifier: false
 
-# You can define configurations for models in the `source-paths` directory here.
+# You can define configurations for models in the `model-paths` directory here.
 # Using these configurations, you can enable or disable models, change how they
 # are materialized, and more!
 models:
@@ -47,9 +49,9 @@ models:
         +materialized: ephemeral
       airbyte_incremental:
         +tags: incremental_tables
-        # incremental is not enabled for Oracle yet
-        #+materialized: incremental
-        +materialized: table
+        +materialized: incremental
+        # schema change test isn't supported in Oracle yet
+        +on_schema_change: "ignore"
       airbyte_tables:
         +tags: normalized_tables
         +materialized: table
@@ -57,5 +59,6 @@ models:
         +tags: airbyte_internal_views
         +materialized: view
 
-vars:
-  dbt_utils_dispatch_list: ["airbyte_utils"]
+dispatch:
+  - macro_namespace: dbt_utils
+    search_order: ["airbyte_utils", "dbt_utils"]

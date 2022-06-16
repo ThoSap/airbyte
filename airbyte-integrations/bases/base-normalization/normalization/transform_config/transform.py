@@ -253,12 +253,13 @@ class TransformConfig:
         # https://github.com/techindicium/dbt-oracle#configure-your-profile
         dbt_config = {
             "type": "oracle",
+            "protocol": "tcp" if config["encryption"]["encryption_method"] == "unencrypted" else "tcps",
             "host": config["host"],
+            "port": config["port"],
+            "service": config["sid"],
+            "schema": config["schema"],
             "user": config["username"],
             "pass": config["password"],
-            "port": config["port"],
-            "dbname": config["sid"],
-            "schema": config["schema"],
             "threads": 4,
         }
         return dbt_config
