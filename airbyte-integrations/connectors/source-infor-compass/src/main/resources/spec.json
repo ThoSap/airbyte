@@ -1,0 +1,44 @@
+{
+  "documentationUrl": "https://docs.airbyte.io/integrations/sources/infor_compass",
+  "connectionSpecification": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Infor Compass Source Spec",
+    "type": "object",
+    "required": [
+      "tenant_id",
+      "ion_api_key"
+    ],
+    "additionalProperties": false,
+    "properties": {
+      "tenant_id": {
+        "title": "Tenant ID",
+        "description": "The ERP LN cloud instance tenant ID of the Compass Data Lake.",
+        "type": "string",
+        "order": 0
+      },
+      "ion_api_key": {
+        "title": "ION API Key (JSON)",
+        "description": "Your minified ION API key file (JSON contents of file \"Infor Compass JDBC Driver.ionapi\"). See https://youtu.be/yipG8w6qQPg",
+        "type": "string",
+        "order": 1
+      },
+      "schemas": {
+        "title": "Schemas",
+        "description": "The list of schemas to sync from. Defaults to schema \"default\". Case sensitive.",
+        "type": "array",
+        "order": 2,
+        "items": {
+          "type": "string"
+        },
+        "minItems": 1,
+        "uniqueItems": true
+      },
+      "jdbc_url_params": {
+        "title": "Additional JDBC driver properties",
+        "description": "Additional properties to pass to the JDBC URL string when connecting to the database formatted as 'key=value' pairs separated by the symbol '&'. (example: key1=value1&key2=value2&key3=value3)",
+        "type": "string",
+        "order": 3
+      }
+    }
+  }
+}

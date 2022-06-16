@@ -1,0 +1,45 @@
+plugins {
+    id 'application'
+    id 'airbyte-docker'
+    id 'airbyte-integration-test-java'
+}
+
+application {
+    mainClass = 'io.airbyte.integrations.source.infor_compass.InforCompassSource'
+    applicationDefaultJvmArgs = ['-XX:+ExitOnOutOfMemoryError', '-XX:MaxRAMPercentage=75.0']
+}
+
+repositories {
+    maven {
+        /**
+         * Create file %USERPROFILE%\.gradle\gradle.properties (Linux ~/.gradle/gradle.properties) and add properties
+         * NexusGKNPMUsername=jenkins-maven
+         * NexusGKNPMPassword=SECRET_NEXUS_PW_HERE
+         */
+        name = 'NexusGKNPM'
+        // https://docs.gradle.org/current/samples/sample_publishing_credentials.html#:~:text=credential%20values%20are%20provided%20using%20gradle%20properties%20and%20can%20be%20passed%20to%20the%20publish%20task%20in%20multiple%20ways
+        credentials(PasswordCredentials)
+        url = 'https://nexus.gknpm.com/repository/thirdparty'
+    }
+}
+
+
+dependencies {
+    implementation project(':airbyte-db:db-lib')
+    implementation project(':airbyte-integrations:bases:base-java')
+    implementation project(':airbyte-protocol:protocol-models')
+    implementation project(':airbyte-integrations:connectors:source-jdbc')
+    implementation project(':airbyte-integrations:connectors:source-relational-db')
+
+    implementation 'com.infor.idl:jdbc:2020-09'
+
+    testImplementation testFixtures(project(':airbyte-integrations:connectors:source-jdbc'))
+
+    testImplementation 'org.apache.commons:commons-lang3:3.11'
+
+    integrationTestJavaImplementation project(':airbyte-integrations:connectors:source-infor-compasss')
+    integrationTestJavaImplementation project(':airbyte-integrations:bases:standard-source-test')
+
+    implementation files(project(':airbyte-integrations:bases:base-java').airbyteDocker.outputs)
+    integrationTestJavaImplementation files(project(':airbyte-integrations:bases:base-java').airbyteDocker.outputs)
+}
