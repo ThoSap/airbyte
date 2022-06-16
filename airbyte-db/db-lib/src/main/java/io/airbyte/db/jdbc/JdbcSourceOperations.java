@@ -52,8 +52,8 @@ public class JdbcSourceOperations extends AbstractJdbcCompatibleSourceOperations
       case NUMERIC, DECIMAL -> putBigDecimal(json, columnName, resultSet, colIndex);
       case CHAR, VARCHAR, LONGVARCHAR -> putString(json, columnName, resultSet, colIndex);
       case DATE -> putDate(json, columnName, resultSet, colIndex);
-      case TIME -> putTime(json, columnName, resultSet, colIndex);
-      case TIMESTAMP -> putTimestamp(json, columnName, resultSet, colIndex);
+      case TIME, TIME_WITH_TIMEZONE -> putTime(json, columnName, resultSet, colIndex);
+      case TIMESTAMP, TIMESTAMP_WITH_TIMEZONE -> putTimestamp(json, columnName, resultSet, colIndex);
       case BLOB, BINARY, VARBINARY, LONGVARBINARY -> putBinary(json, columnName, resultSet, colIndex);
       case ARRAY -> putArray(json, columnName, resultSet, colIndex);
       default -> putDefault(json, columnName, resultSet, colIndex);
@@ -68,8 +68,8 @@ public class JdbcSourceOperations extends AbstractJdbcCompatibleSourceOperations
       throws SQLException {
     switch (cursorFieldType) {
 
-      case TIMESTAMP -> setTimestamp(preparedStatement, parameterIndex, value);
-      case TIME -> setTime(preparedStatement, parameterIndex, value);
+      case TIMESTAMP, TIMESTAMP_WITH_TIMEZONE -> setTimestamp(preparedStatement, parameterIndex, value);
+      case TIME, TIME_WITH_TIMEZONE -> setTime(preparedStatement, parameterIndex, value);
       case DATE -> setDate(preparedStatement, parameterIndex, value);
       case BIT -> setBit(preparedStatement, parameterIndex, value);
       case BOOLEAN -> setBoolean(preparedStatement, parameterIndex, value);
@@ -113,8 +113,8 @@ public class JdbcSourceOperations extends AbstractJdbcCompatibleSourceOperations
       case NUMERIC, DECIMAL -> JsonSchemaType.NUMBER;
       case CHAR, NCHAR, NVARCHAR, VARCHAR, LONGVARCHAR -> JsonSchemaType.STRING;
       case DATE -> JsonSchemaType.STRING;
-      case TIME -> JsonSchemaType.STRING;
-      case TIMESTAMP -> JsonSchemaType.STRING;
+      case TIME, TIME_WITH_TIMEZONE -> JsonSchemaType.STRING;
+      case TIMESTAMP, TIMESTAMP_WITH_TIMEZONE -> JsonSchemaType.STRING;
       case BLOB, BINARY, VARBINARY, LONGVARBINARY -> JsonSchemaType.STRING_BASE_64;
       case ARRAY -> JsonSchemaType.ARRAY;
       // since column types aren't necessarily meaningful to Airbyte, liberally convert all unrecgonised
